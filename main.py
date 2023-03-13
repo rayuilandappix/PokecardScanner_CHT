@@ -80,7 +80,7 @@ def on_release(key):
     #框选区域结束点
     global stax,stay,stbx,stby,staix,staiy
     if key==keyboard.Key.shift_l:
-        print("捕获结束点")
+        print("框选结束点")
         mousex,mousey=pag.position()
         print(mousex,mousey)    
         try:
@@ -122,7 +122,7 @@ while True:
     if(event=="getarea"):
         with keyboard.Listener(on_press=on_press,on_release=on_release) as listener:
             listener.join()
-        print("捕获结束") 
+        print("完成框选") 
     if(event=="find"):
         getpic()
         outcard,outlist=findpic()
