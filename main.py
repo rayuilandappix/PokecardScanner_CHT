@@ -17,6 +17,7 @@ stbx=0
 stby=0
 sglist=[]
 
+#识别相似图片并给出列表
 def findpic():
     lastlist=[]
     with pimg.open("sc.png") as imgs:
@@ -48,18 +49,6 @@ def findpic():
         return piclist[0],lastlist
 
 
-def on_press(key):
-    global stax,stay,stbx,stby
-    #开始截图
-    if key==keyboard.Key.shift_l and stax==0 and stay==0:
-        print("======================")
-        mousex,mousey=pag.position()
-        print("捕获开始点")
-        print(mousex,mousey)
-        stax=mousex
-        stay=mousey
-
-
 def downloadcard(cardnum):
     url="https://asia.pokemon-card.com/tw/card-img/tw"+cardnum.replace('.png','').zfill(8)+'.png'
     print(url)
@@ -74,8 +63,21 @@ def downloadcard(cardnum):
                 except:
                     pass
 
+#键盘按下检测
+def on_press(key):
+    global stax,stay,stbx,stby
+    #框选区域开始点
+    if key==keyboard.Key.shift_l and stax==0 and stay==0:
+        print("======================")
+        mousex,mousey=pag.position()
+        print("框选开始点")
+        print(mousex,mousey)
+        stax=mousex
+        stay=mousey
+
+#键盘释放检测
 def on_release(key):
-    #截图结束
+    #框选区域结束点
     global stax,stay,stbx,stby,staix,staiy
     if key==keyboard.Key.shift_l:
         print("捕获结束点")
@@ -98,7 +100,7 @@ def on_release(key):
     stay=0
 #print(findpic())
 
-
+#捕获框选区域图片
 def getpic():
     try:
         im=ImageGrab.grab((staix,staiy,stbx,stby))
@@ -107,6 +109,8 @@ def getpic():
     except:
         print("错误")
 
+
+#GUI初始化
 sg.theme('LightGrey1')
 layout=[
     [sg.Button("框选区域",key='getarea',font="黑体"),sg.Button("查询",key='find',font="黑体"),sg.Listbox(values=sglist,key='cardlist',enable_events=True,size=(35,5))],
