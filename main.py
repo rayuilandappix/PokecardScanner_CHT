@@ -16,11 +16,14 @@ staiy=0
 stbx=0
 stby=0
 sglist=[]
+oldcard=""
 
 #识别相似图片并给出列表
 def findpic():
     lastlist=[]
     with pimg.open("sc.png") as imgs:
+        imgs=imgs.resize((300,417))
+        imgs=imgs.crop((25,50,280,200))
         hash1 = imagehash.average_hash(imgs, 10).hash
     rget=np.load("ptcgtcn.npy",allow_pickle=True)
     belike=50
@@ -114,9 +117,10 @@ def getpic():
 sg.theme('LightGrey1')
 layout=[
     [sg.Button("框选区域",key='getarea',font="黑体"),sg.Button("查询",key='find',font="黑体"),sg.Listbox(values=sglist,key='cardlist',enable_events=True,size=(35,5))],
-    [sg.Image(key="showpic",filename="downcard/downloadcard.png")]
+    [sg.Image(key="showpic",filename="downcard/downloadcard.png")],
+    [sg.Checkbox(key='autostart',text='自动',default=False)]
     ]
-window= sg.Window('PTCG卡片助手', layout,size=(350,550),keep_on_top=True)
+window= sg.Window('PTCG卡片助手', layout,size=(350,560),keep_on_top=True)
 while True:
     event,value = window.Read(timeout=3000)
     if(event=="getarea"):
@@ -140,3 +144,15 @@ while True:
             print(e)
     if(event==WIN_CLOSED):
         break
+    try:
+        if value['autostart']==True:
+            getpic()
+            outcard,outlist=findpic()
+            if(outcard!=oldcard):
+                downloadcard(outcard)
+                oldcard=outcard
+            getcard="downcard/downloadcard.png"
+            window['showpic'].update(getcard)
+            window['cardlist'].update(outlist)
+    except Exception as e:
+        print(e)
