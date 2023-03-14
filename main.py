@@ -63,8 +63,8 @@ def downloadcard(cardnum):
                     reimg=pimg.open('downcard/downloadcard.png').resize((300,417))
                     reimg.save('downcard/downloadcard.png')
                     break
-                except:
-                    pass
+                except: 
+                    break
 
 #键盘按下检测
 def on_press(key):
