@@ -124,6 +124,7 @@ window= sg.Window('PTCG卡片助手', layout,size=(350,560),keep_on_top=True)
 while True:
     event,value = window.Read(timeout=3000)
     if(event=="getarea"):
+        print("鼠标移动到卡片左上角，按住左Shift键，直到把鼠标移动到卡片右下角松开Shift，即可完成框选")
         with keyboard.Listener(on_press=on_press,on_release=on_release) as listener:
             listener.join()
         print("完成框选") 
