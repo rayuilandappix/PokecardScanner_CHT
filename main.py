@@ -58,10 +58,10 @@ def downloadcard(cardnum):
     while True:
                 try:
                     res=requests.get(url,timeout=5)
-                    with open("downcard/downloadcard.png",'wb') as f:
+                    with open("download_cards/downloadcard.png",'wb') as f:
                         f.write(res.content)
-                    reimg=pimg.open('downcard/downloadcard.png').resize((300,417))
-                    reimg.save('downcard/downloadcard.png')
+                    reimg=pimg.open('download_cards/downloadcard.png').resize((300,417))
+                    reimg.save('download_cards/downloadcard.png')
                     break
                 except: 
                     break
@@ -116,11 +116,10 @@ def getpic():
 #GUI初始化
 sg.theme('LightGrey1')
 layout=[
-    [sg.Button("框选区域",key='getarea',font="黑体"),sg.Button("查询",key='find',font="黑体"),sg.Listbox(values=sglist,key='cardlist',enable_events=True,size=(35,5))],
-    [sg.Image(key="showpic",filename="downcard/downloadcard.png")],
-    [sg.Checkbox(key='autostart',text='自动',default=False)]
+    [sg.Button("框选区域",key='getarea',font="黑体"),sg.Button("查询",key='find',font="黑体"),sg.Checkbox(key='autostart',text='自动',default=False)],
+    [sg.Image(key="showpic",filename="download_cards/downloadcard.png")]
     ]
-window= sg.Window('PTCG卡片助手', layout,size=(350,560),keep_on_top=True)
+window= sg.Window('PTCG观赛助手', layout,size=(350,460),keep_on_top=True)
 while True:
     event,value = window.Read(timeout=3000)
     if(event=="getarea"):
@@ -132,14 +131,13 @@ while True:
         getpic()
         outcard,outlist=findpic()
         downloadcard(outcard)
-        getcard="downcard/downloadcard.png"
+        getcard="download_cards/downloadcard.png"
         window['showpic'].update(getcard)
-        window['cardlist'].update(outlist)
     if(event=="cardlist"):
         try:
             outcard=window['cardlist'].get()
             downloadcard(outcard[0])
-            getcard="downcard/downloadcard.png"
+            getcard="download_cards/downloadcard.png"
             window['showpic'].update(getcard)
         except Exception as e:
             print(e)
@@ -152,8 +150,7 @@ while True:
             if(outcard!=oldcard):
                 downloadcard(outcard)
                 oldcard=outcard
-            getcard="downcard/downloadcard.png"
+            getcard="download_cards/downloadcard.png"
             window['showpic'].update(getcard)
-            window['cardlist'].update(outlist)
     except Exception as e:
         print(e)
