@@ -18,6 +18,18 @@ stby=0
 sglist=[]
 oldcard=""
 
+
+def getcut():
+    # 保存剪切板内图片
+    im = ImageGrab.grabclipboard() 
+    if isinstance(im, pimg.Image):
+        lastlist=[]
+        lastpic=""
+        #print("Image: size : %s, mode: %s" % (im.size, im.mode))
+        im.save("sc.png")
+
+
+
 #识别相似图片并给出列表
 def findpic():
     lastlist=[]
@@ -57,13 +69,14 @@ def downloadcard(cardnum):
     print(url)
     while True:
                 try:
-                    res=requests.get(url,timeout=5)
+                    res=requests.get(url,timeout=15)
                     with open("download_cards/downloadcard.png",'wb') as f:
                         f.write(res.content)
-                    reimg=pimg.open('download_cards/downloadcard.png').resize((300,417))
-                    reimg.save('download_cards/downloadcard.png')
+                    reimg=pimg.open('download_cards/downloadcard.png').resize((300,417),pimg.BICUBIC)
+                    reimg.save('download_cards/downloadcard.png',subsampling=0,quality=95,dpi=(300,300))
                     break
-                except: 
+                except Exception as e: 
+                    print(e)
                     break
 
 #键盘按下检测
@@ -116,10 +129,10 @@ def getpic():
 #GUI初始化
 sg.theme('LightGrey1')
 layout=[
-    [sg.Button("框选区域",key='getarea',font="黑体"),sg.Button("查询",key='find',font="黑体"),sg.Checkbox(key='autostart',text='自动',default=False)],
+    [sg.Button("框选区域",key='getarea',font="黑体"),sg.Button("查询",key='find',font="黑体"),sg.Button("截图查询",key='findcut',font="黑体"),sg.Checkbox(key='autostart',text='自动',default=False)],
     [sg.Image(key="showpic",filename="download_cards/downloadcard.png")]
     ]
-window= sg.Window('PTCG观赛助手', layout,size=(350,460),keep_on_top=True)
+window= sg.Window('PTCG观赛助手', layout,size=(350,500),keep_on_top=True)
 while True:
     event,value = window.Read(timeout=3000)
     if(event=="getarea"):
@@ -129,6 +142,12 @@ while True:
         print("完成框选") 
     if(event=="find"):
         getpic()
+        outcard,outlist=findpic()
+        downloadcard(outcard)
+        getcard="download_cards/downloadcard.png"
+        window['showpic'].update(getcard)
+    if(event=="findcut"):
+        getcut()
         outcard,outlist=findpic()
         downloadcard(outcard)
         getcard="download_cards/downloadcard.png"
