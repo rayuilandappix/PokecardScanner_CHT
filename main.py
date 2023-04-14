@@ -7,7 +7,12 @@ from PIL import Image as pimg
 from PIL import ImageGrab
 from pynput import keyboard
 import pyautogui as pag
-
+from requests_html import HTMLSession
+import configparser
+cf=configparser.ConfigParser()
+cf.read("config.ini",encoding="utf-8-sig")
+autosizew=int(cf.get("Size","width"))
+autosizeh=int(cf.get("Size","high"))
 #初始化
 stax=0
 stay=0
@@ -78,6 +83,23 @@ def downloadcard(cardnum):
                 except Exception as e: 
                     print(e)
                     break
+    url="https://asia.pokemon-card.com/tw/card-search/detail/"+cardnum
+    try:
+        session=HTMLSession()
+        r=session.get(url)
+        e=r.html.find('.skill')
+        #print(e)
+        out=""
+        
+        for i in e:
+            if(out==""):
+                 out=i.text
+            else:
+                out=out+'\n'+i.text
+        window['cardinfo'].update(out)
+    except Exception as e:
+        print(e)
+
 
 #键盘按下检测
 def on_press(key):
@@ -130,9 +152,11 @@ def getpic():
 sg.theme('LightGrey1')
 layout=[
     [sg.Button("框选区域",key='getarea',font="黑体"),sg.Button("查询",key='find',font="黑体"),sg.Button("截图查询",key='findcut',font="黑体"),sg.Checkbox(key='autostart',text='自动',default=False)],
-    [sg.Image(key="showpic",filename="download_cards/downloadcard.png")]
+    #[sg.Button("查询",key='findcut',font="黑体")],
+    [sg.Image(key="showpic",filename="download_cards/downloadcard.png")],
+    [sg.ML(key='cardinfo',font="黑体",size=(350,200))]
     ]
-window= sg.Window('PTCG观赛助手', layout,size=(350,500),keep_on_top=True)
+window= sg.Window('PTCG截图卡查助手', layout,size=(autosizew,autosizeh),keep_on_top=True)
 while True:
     event,value = window.Read(timeout=3000)
     if(event=="getarea"):
