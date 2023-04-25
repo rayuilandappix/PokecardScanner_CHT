@@ -9,6 +9,9 @@ from pynput import keyboard
 import pyautogui as pag
 from requests_html import HTMLSession
 import configparser
+#加了这个pyinstaller打包有问题
+#import zhconv
+
 cf=configparser.ConfigParser()
 cf.read("config.ini",encoding="utf-8-sig")
 autosizew=int(cf.get("Size","width"))
@@ -96,6 +99,8 @@ def downloadcard(cardnum):
                  out=i.text
             else:
                 out=out+'\n'+i.text
+        #不需要转简体可以注释掉
+        #out=zhconv.convert(out,'zh-cn')
         window['cardinfo'].update(out)
     except Exception as e:
         print(e)
