@@ -9,6 +9,7 @@ from pynput import keyboard
 import pyautogui as pag
 from requests_html import HTMLSession
 import configparser
+import os
 #加了这个pyinstaller打包有问题
 #import zhconv
 
@@ -73,19 +74,29 @@ def findpic():
 
 
 def downloadcard(cardnum):
-    url="https://asia.pokemon-card.com/tw/card-img/tw"+cardnum.replace('.png','').zfill(8)+'.png'
-    print(url)
-    while True:
-                try:
-                    res=requests.get(url,timeout=15)
-                    with open("download_cards/downloadcard.png",'wb') as f:
-                        f.write(res.content)
-                    reimg=pimg.open('download_cards/downloadcard.png').resize((300,417),pimg.BICUBIC)
-                    reimg.save('download_cards/downloadcard.png',subsampling=0,quality=95,dpi=(300,300))
-                    break
-                except Exception as e: 
-                    print(e)
-                    break
+    #检查是否有缓存文件
+    if os.path.exists("download_cards/"+cardnum.replace('.png','').zfill(8)+'.png'):
+        img_cache=pimg.open("download_cards/"+cardnum.replace('.png','').zfill(8)+'.png')
+        img_cache.save("download_cards/downloadcard.png")
+    else:
+        url="https://asia.pokemon-card.com/tw/card-img/tw"+cardnum.replace('.png','').zfill(8)+'.png'
+        print(url)
+        while True:
+                    try:
+                        res=requests.get(url,timeout=15)
+                        with open("download_cards/downloadcard.png",'wb') as f:
+                            f.write(res.content)
+                        reimg=pimg.open('download_cards/downloadcard.png').resize((300,417),pimg.BICUBIC)
+                        reimg.save('download_cards/downloadcard.png',subsampling=0,quality=95,dpi=(300,300))
+                        break
+                    except Exception as e: 
+                        print(e)
+                        break
+        #缓存文件
+        img_cache=pimg.open("download_cards/downloadcard.png")
+        img_cache.save("download_cards/"+cardnum.replace('.png','').zfill(8)+'.png')
+
+
     url="https://asia.pokemon-card.com/tw/card-search/detail/"+cardnum
     try:
         session=HTMLSession()
