@@ -24,7 +24,6 @@ PokecardScanner_CHT 是一款基于imagehash技术的宝可梦卡牌图片搜索
 - 如果搜索结果与实际卡片不符，请检查框选的区域是否正确。可以检查生成的“sc.png”文件是否截取到了完整的卡图，并确保没有大边框。如有问题，请重新框选。
 - 对于双屏或多屏用户，请确保框选区域位于主屏幕上，否则“区域框选查询”功能将无法正常工作。
 - 您可以使用“ImageRecognitionData\ptcgtcn.npy”数据开发更多图像识别应用。该数据会持续更新。
-- 您可以使用“ImageRecognitionData\ptcgtcn.npy”数据开发更多图像识别应用。该数据会持续更新。
 - 如何利用数据库查找最相似的卡牌可以查看main里的find_most_similar_images函数
 - 可参考gethash.py来建立数据库
 
