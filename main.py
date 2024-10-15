@@ -56,6 +56,8 @@ def find_most_similar_images():
             for i in image_data:
                 #获取一张卡的哈希值为哈希2
                 hash2=i[1]
+                #print(i)
+                #print(type(hash2))
                 #比较哈希1，哈希2的相似度，如果高于阈值，加入列表
                 if np.count_nonzero(hash1 != hash2) <= diff_limit:
                     pic_number_list.append(i[0].replace(".png",""))

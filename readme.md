@@ -26,8 +26,9 @@ PokecardScanner_CHT 是一款基于imagehash技术的宝可梦卡牌图片搜索
 - 您可以使用“ImageRecognitionData\ptcgtcn.npy”数据开发更多图像识别应用。该数据会持续更新。
 - 如何利用数据库查找最相似的卡牌可以查看main里的find_most_similar_images函数
 - 可参考gethash.py来建立数据库
+- pysimplegui开始收费，后续可能会采用别的GUI
 
 ## 卡片收录说明
 
-- 数据集当前更新至SV7《星晶奇迹》及《战术预组》。
+- 数据集当前更新至SV7a《乐园腾龙》。
 - 本项目不储存任何卡牌原始信息，仅储存识别所需抽样数据，原卡牌数据版权由株式会社宝可梦所有。
